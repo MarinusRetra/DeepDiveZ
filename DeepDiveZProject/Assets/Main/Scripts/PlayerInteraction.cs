@@ -5,10 +5,6 @@ public class PlayerInteraction : MonoBehaviour
 {
     [SerializeField] private float interactionRange = 2;
     [SerializeField] private LayerMask interactionLayer;
-    void Start()
-    {
-        InteractInCircle();
-    }
 
     /// <summary>
     /// Checks around the player for any interactable objects, and interacts with them
