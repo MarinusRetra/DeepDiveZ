@@ -1,13 +1,11 @@
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private PlayerInput PlayerInput;
-    [SerializeField] private LayerMask FloorLayer;
+    [SerializeField] private float acceptDistance;
 
     public UnityEvent OnPlayerStandsStill;
 
@@ -15,27 +13,42 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isMoving;
 
+    private InteractableObject interactable;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
     }
 
-    private void OnEnable()
+    public void Move(Vector3 position)
     {
-        PlayerInput.actions["LMB"].performed += (InputAction.CallbackContext ctx) => MouseClicked();
+        interactable = null;
+        isMoving = true;
+        agent.SetDestination(position);
     }
 
-    private void MouseClicked()
+    public void MoveToInteractable(GameObject _interactable)
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        //Shoot ray from camera to where the player should move
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, FloorLayer))
+        //When no interactable script is found, return
+        if (!_interactable.TryGetComponent(out InteractableObject testInteractable))
         {
-            isMoving = true;
-            print("Ray hit somethin");
-            agent.SetDestination(hit.point);
+            Debug.Log("Interactable object not found on interactable", _interactable);
+            return;
         }
+
+        //When collider is found, move to the edge of the collider
+        if (_interactable.TryGetComponent(out BoxCollider interactableCollider))
+        {
+            Move(interactableCollider.ClosestPoint(transform.position));
+            Debug.DrawRay(interactableCollider.ClosestPoint(transform.position), Vector3.up, Color.green, 30);
+        }
+        //Otherwise just move to the center
+        else
+        {
+            Move(_interactable.transform.position);
+        }
+
+        interactable = testInteractable;
     }
 
     private void Update()
@@ -44,8 +57,14 @@ public class PlayerMovement : MonoBehaviour
         if (agent.hasPath == false && isMoving)
         {
             isMoving = false;
-            print("Player stopped");
             OnPlayerStandsStill.Invoke();
+
+            if (interactable) interactable.Interact();
+        }
+
+        if (agent.remainingDistance <= acceptDistance)
+        {
+            agent.SetDestination(transform.position);
         }
     }
 }
