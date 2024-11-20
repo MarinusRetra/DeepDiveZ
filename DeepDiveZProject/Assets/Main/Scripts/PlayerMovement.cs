@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     public void MoveToInteractable(GameObject _interactable)
     {
         //When no interactable script is found, return
-        if (!_interactable.TryGetComponent(out InteractableObject testInteractable))
+        if (!_interactable.TryGetComponent(out InteractableObject targetInteractable))
         {
             Debug.Log("Interactable object not found on interactable", _interactable);
             return;
@@ -48,11 +48,13 @@ public class PlayerMovement : MonoBehaviour
             Move(_interactable.transform.position);
         }
 
-        interactable = testInteractable;
+        interactable = targetInteractable;
     }
 
     private void Update()
     {
+        if (agent == null) return;
+
         //Call event when player stopped moving
         if (agent.hasPath == false && isMoving)
         {
