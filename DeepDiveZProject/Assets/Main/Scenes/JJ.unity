@@ -663,6 +663,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1067925043160546768, guid: 940f5857377a86d48b62c8bf119e726a, type: 3}
   m_PrefabInstance: {fileID: 6050193702634424068}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1156648573 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6703867831599359479, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+  m_PrefabInstance: {fileID: 2110316780973912243}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1405317688
 GameObject:
   m_ObjectHideFlags: 0
@@ -969,9 +980,21 @@ PrefabInstance:
       propertyPath: TaskCamera
       value: 
       objectReference: {fileID: 1405317690}
+    - target: {fileID: 486999799523256407, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+      propertyPath: DistanceToPlayer
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 2287208566582317801, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
       propertyPath: m_Name
       value: AfwasMinigame
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521972109026186248, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+      propertyPath: onInteract.m_PersistentCalls.m_Calls.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521972109026186248, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+      propertyPath: onInteract.m_PersistentCalls.m_Calls.Array.data[4].m_Mode
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4521972109026186248, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
       propertyPath: onInteract.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -981,6 +1004,34 @@ PrefabInstance:
       propertyPath: onInteract.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 769467185}
+    - target: {fileID: 4521972109026186248, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+      propertyPath: onInteract.m_PersistentCalls.m_Calls.Array.data[4].m_Target
+      value: 
+      objectReference: {fileID: 2110316780973912244}
+    - target: {fileID: 4521972109026186248, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+      propertyPath: onInteract.m_PersistentCalls.m_Calls.Array.data[4].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521972109026186248, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+      propertyPath: onInteract.m_PersistentCalls.m_Calls.Array.data[4].m_MethodName
+      value: set_enabled
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521972109026186248, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+      propertyPath: onInteract.m_PersistentCalls.m_Calls.Array.data[4].m_TargetAssemblyTypeName
+      value: UnityEngine.Behaviour, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521972109026186248, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+      propertyPath: onInteract.m_PersistentCalls.m_Calls.Array.data[4].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521972109026186248, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+      propertyPath: onInteract.m_PersistentCalls.m_Calls.Array.data[4].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5280938221288499131, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+      propertyPath: minSpeed
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 5280938221288499131, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
       propertyPath: taskCamera
       value: 
@@ -992,6 +1043,14 @@ PrefabInstance:
     - target: {fileID: 5280938221288499131, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
       propertyPath: DishesLayer.m_Bits
       value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 5280938221288499131, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+      propertyPath: dirtDecalProjector
+      value: 
+      objectReference: {fileID: 1156648573}
+    - target: {fileID: 6084089856244947231, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.43
       objectReference: {fileID: 0}
     - target: {fileID: 7858546492216095775, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1038,6 +1097,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+--- !u!114 &2110316780973912244 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5280938221288499131, guid: 5cb128cbe04ba884da70d8de861e4da2, type: 3}
+  m_PrefabInstance: {fileID: 2110316780973912243}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6a94f2cccf6f7b49bf62c9686f1ac2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6050193702634424068
 PrefabInstance:
   m_ObjectHideFlags: 0

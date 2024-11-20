@@ -24,7 +24,7 @@ public class Dish : MonoBehaviour
             ObjectGrabbing.StopGrabbing();
             transform.position = placeSpot.GetPlaceSpot.position;
             transform.rotation = placeSpot.GetPlaceSpot.rotation;
-            Collider.enabled = false;
+            //Collider.enabled = false;
             Rigidbody.isKinematic = true;
             State = DishState.BeingCleaned;
         }
