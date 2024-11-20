@@ -15,8 +15,12 @@ public class PlayerMovement : MonoBehaviour
 
     private InteractableObject interactable;
 
+    //playerCollider is nodig om de radius te pakken voor de grass shader
+    private CapsuleCollider playerCollider;
+
     private void Awake()
     {
+        playerCollider = GetComponent<CapsuleCollider>();
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -53,6 +57,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        //Gebruik ik voor gras displacement bij de gras shader -Marinus
+        Shader.SetGlobalVector("_Player", transform.position + Vector3.up * playerCollider.radius);
+
         if (agent == null) return;
 
         //Call event when player stopped moving
