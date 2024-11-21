@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class Grass : MonoBehaviour
 {
-   [SerializeField] bool temp = false;
-
     [SerializeField] private List<GameObject> GrassObjectsStartCount;
     private List<GameObject> GrassObjectsCurrentCount;
 
     [SerializeField] private TextMeshProUGUI grassPercentageText;
+
+    //Deze functie start de progress counter en reset het gras
     public void MinigameStart()
     {
         foreach (GameObject obj in GrassObjectsStartCount)
@@ -27,15 +27,6 @@ public class Grass : MonoBehaviour
         grassPercentageText.text = $"{ Mathf.Round(Mathf.Abs(((float)GrassObjectsCurrentCount.Count / (float)GrassObjectsStartCount.Count * 100) - 100))}";
     }
 
-    private void Update()
-    {
-        if (temp)
-        { 
-            temp = false;
-            MinigameStart();
-        }
-    }
-
     //Dit wordt aangeroepen als een gras stukje uitgezet wordt
     public void RemoveGrassElement(GameObject _grassObjectIn)
     {
@@ -47,7 +38,7 @@ public class Grass : MonoBehaviour
     //Op collision wordt deze als eerst aangeroepen
     public static IEnumerator WaitThenDestory(GameObject _gameObjectIn)
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.3f);
         _gameObjectIn.SetActive(false);
     }
 }
