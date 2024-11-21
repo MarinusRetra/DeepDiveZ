@@ -11,6 +11,12 @@ public class ProgressFeedback : MonoBehaviour
     [SerializeField] private int currentSeconds = 0;
     private Sprite currentMinigameImage = null;
     [SerializeField]private Texture2D[] templateImages;
+
+    [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private GameObject endUI;
+    [SerializeField] private Transform scrollTransform;
+    [SerializeField] private int cardOffset = 50;
+    [SerializeField] private Minigames currentMinigame = Minigames.Grasmaaien;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -18,69 +24,94 @@ public class ProgressFeedback : MonoBehaviour
         {
             mainCam = Camera.main;
         }
-        StartCoroutine(startMinigame());
+        StartCoroutine(startMinigame(Minigames.Grasmaaien));
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.L))
         {
-            stopMinigame(Minigames.Grasmaaien);
+            stopMinigame();
+        }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            StartCoroutine(stopGame());
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            StartCoroutine(startMinigame(currentMinigame));
         }
     }
 
-    IEnumerator startMinigame()
+    IEnumerator startMinigame(Minigames currentMini)
     {
+        currentMinigame = currentMini;
         yield return new WaitForSeconds(1);
         inMinigame = true;
-        int randomTime = Random.Range(1, 10);
-        int timesTakenSS = 0;
+        int randomTime = Random.Range(2, 10);
+        int timesTakenSS = 1;
         while(inMinigame)
         {
-            yield return new WaitForSeconds(1);
             currentSeconds++;
-            if(currentSeconds == 10 && timesTakenSS < randomTime)
+            if(currentSeconds == 10 * timesTakenSS && timesTakenSS < randomTime)
             {
                 currentMinigameImage = ScreenshotManager.TakeScreenshot(mainCam);
                 timesTakenSS++;
             }
+            yield return new WaitForSeconds(1);
         }
     }
 
-    public void stopMinigame(Minigames miniGame)
+    public void stopMinigame()
     {
         inMinigame = false;
         MinigameProgress tracker = new MinigameProgress();
         if(currentMinigameImage == null)
         {
-            currentMinigameImage = ScreenshotManager.TextureToSprite(templateImages[(int)miniGame]);
+            currentMinigameImage = ScreenshotManager.TextureToSprite(templateImages[(int)currentMinigame]);
         }
         tracker.screenshot = currentMinigameImage;
         tracker.timeSpend = currentSeconds;
-        tracker.minigame = miniGame;
+        tracker.minigame = currentMinigame;
         currentSeconds = 0;
         currentMinigameImage = null;
         SortTrackerInList(tracker);
-        StartCoroutine(startMinigame());
     }
 
-    public void SortTrackerInList(MinigameProgress progress)
+    IEnumerator stopGame()
+    {
+        yield return new WaitForSeconds(3);
+        stopMinigame();
+        endUI.SetActive(true);
+
+        for(int i = 0;i < progressList.Count; i++)
+        {
+            Vector3 pos = scrollTransform.position;
+            GameObject card = Instantiate(cardPrefab, new Vector3(pos.x,pos.y - (cardOffset * (i)), pos.z), scrollTransform.rotation, scrollTransform.parent);
+            CardReferences refr = card.GetComponent<CardReferences>();
+            refr.stats = progressList[i];
+            refr.UpdateCard();
+            //yield return new WaitForSeconds(1);
+        }
+    }
+
+    public void SortTrackerInList(MinigameProgress _progress)
     {
         if(progressList.Count == 0)
         {
-            progressList.Add(progress);
+            progressList.Add(_progress);
             return;
         }
         for(int i = 0;i < progressList.Count;i++)
         {
-            if (!(progressList[i].timeSpend > progress.timeSpend))
+            if (!(progressList[i].timeSpend > _progress.timeSpend))
             {
-                progressList.Insert(i, progress);
+                progressList.Insert(i, _progress);
                 return;
             }
         }
-        progressList.Add(progress);
+        progressList.Add(_progress);
     }
 
 }
@@ -91,5 +122,7 @@ public struct MinigameProgress
     public float timeSpend;
     public float progressOnTask;
     public Sprite screenshot;
+
+    public int rating;
 
 }
