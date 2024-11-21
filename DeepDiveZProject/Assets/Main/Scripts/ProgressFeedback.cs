@@ -23,7 +23,6 @@ public class ProgressFeedback : MonoBehaviour
         {
             mainCam = Camera.main;
         }
-        StartCoroutine(StartMinigame(Minigames.Grasmaaien));
     }
 
     // Update is called once per frame
@@ -137,7 +136,7 @@ public class ProgressFeedback : MonoBehaviour
         summaryCard.rating = best.totalThumbs;
         summaryCard.progressOnTask = best.totalPercentage / best.amountOfGames;
         summaryCard.leerLijn = best.leerLijn;
-        summaryCard.rating = 100;
+        summaryCard.rating = 0;
         summaryCard.screenshot = ScreenshotManager.TextureToSprite(best.image);
         CardReferences endRef = endUI.GetComponent<CardReferences>();
         endRef.stats = summaryCard;

@@ -209,7 +209,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 3173e2e764a449d4c99f26e121bc030a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -855,7 +855,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 55760b4ca9aac824cb416047f238958e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1037,7 +1037,9 @@ MonoBehaviour:
   progressText: {fileID: 6434191278861371130}
   screenshot: {fileID: 6971288946739501043}
   thumb: {fileID: 3319079410483679447}
+  thumbText: {fileID: 0}
   thumbSprites:
   - {fileID: 21300000, guid: 84189b4c7caeef3419b6b031b8812685, type: 3}
   - {fileID: 21300000, guid: 99e5d180080c96940a65c6d906ff9131, type: 3}
   background: {fileID: 1683146658779389205}
+  titleText: {fileID: 0}
