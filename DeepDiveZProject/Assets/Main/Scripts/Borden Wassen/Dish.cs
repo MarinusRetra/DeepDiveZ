@@ -32,8 +32,7 @@ public class Dish : MonoBehaviour
             {
                 print("Sink go brr");
                 objectGrabbing.StopGrabbing();
-                transform.position = placeSpot.GetPlaceSpot.position;
-                transform.rotation = placeSpot.GetPlaceSpot.rotation;
+                transform.SetPositionAndRotation(placeSpot.GetPlaceSpot.position, placeSpot.GetPlaceSpot.rotation);
                 Rigidbody.isKinematic = true;
                 State = DishState.BeingCleaned;
             }
@@ -41,13 +40,17 @@ public class Dish : MonoBehaviour
             {
                 print("Drying rack");
                 objectGrabbing.StopGrabbing();
-                transform.position = placeSpot.GetPlaceSpot.position;
-                transform.rotation = placeSpot.GetPlaceSpot.rotation;
+                transform.SetPositionAndRotation(placeSpot.GetPlaceSpot.position, placeSpot.GetPlaceSpot.rotation);
                 Rigidbody.isKinematic = true;
-                State = DishState.BeingCleaned;
+                State = DishState.Drying;
+                //DishData dishData = dishSpawner.GetDishData(gameObject);
+                //dishData.IsDone = true;
+                dishSpawner.SetIsDone(gameObject, true);
+                //DishData test = dishSpawner.GetDishData(gameObject);
+                //print("IsDone : " + test.IsDone);
                 MayPickup = false;
-                dishSpawner.Remove(Rigidbody);
                 dishSpawner.UnlockTop();
+                dishSpawner.CheckDone();
             }
         }
     }
