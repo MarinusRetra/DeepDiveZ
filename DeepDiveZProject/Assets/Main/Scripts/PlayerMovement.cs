@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
 
     private InteractableObject interactable;
 
+    private bool Active = true;
+
     //playerCollider is nodig om de radius te pakken voor de grass shader
     private CapsuleCollider playerCollider;
 
@@ -58,7 +60,10 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         //Gebruik ik voor gras displacement bij de gras shader -Marinus
-        Shader.SetGlobalVector("_Player", transform.position + Vector3.up * playerCollider.radius);
+        if (Active)
+        {
+            Shader.SetGlobalVector("_Player", transform.position + Vector3.up * playerCollider.radius);
+        }
 
         if (agent == null) return;
 
@@ -75,5 +80,10 @@ public class PlayerMovement : MonoBehaviour
         {
             agent.SetDestination(transform.position);
         }
+    }
+
+    public void ToggleActive()
+    { 
+        Active = !Active;
     }
 }

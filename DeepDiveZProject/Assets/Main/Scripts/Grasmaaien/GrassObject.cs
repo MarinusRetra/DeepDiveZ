@@ -13,7 +13,6 @@ public class GrassObject : MonoBehaviour
     {
         if (other.CompareTag("LawnMower")) 
         {
-            Debug.Log("asdasdads");
             StartCoroutine(Grass.WaitThenDestory(gameObject));
         }
     }

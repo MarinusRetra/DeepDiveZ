@@ -6,10 +6,15 @@ public class LawnMowerMovement : MonoBehaviour
     [SerializeField] private float maxMovementSpeed;
     [SerializeField] private float turnSpeed;
 
+    private CapsuleCollider playerCollider;
+
     private Rigidbody rb;
+
+    bool Active = false;
 
     private void Start()
     {
+        playerCollider = GetComponent<CapsuleCollider>();
         Cursor.lockState = CursorLockMode.Locked;
         rb = GetComponent<Rigidbody>();
         rb.maxLinearVelocity = maxMovementSpeed;
@@ -17,14 +22,24 @@ public class LawnMowerMovement : MonoBehaviour
 
     private void Update()
     {
-        transform.Rotate(Vector3.up * (((Mouse.current.delta.x.ReadValue()/100) * turnSpeed)));
+        if (Active)
+        {
+            Shader.SetGlobalVector("_Player", transform.position + Vector3.up * playerCollider.radius);
+        }
 
-    #if UNITY_EDITOR
+        transform.Rotate(Vector3.up * (((Mouse.current.delta.x.ReadValue() / 100) * turnSpeed)));
+
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.C))
         {
             Cursor.lockState = CursorLockMode.None;
         }
-    #endif
+#endif
+    }
+
+    public void ToggleActive()
+    { 
+        Active = !Active;
     }
 
     private void FixedUpdate()
