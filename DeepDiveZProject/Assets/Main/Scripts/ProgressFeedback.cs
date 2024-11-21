@@ -117,17 +117,16 @@ public class ProgressFeedback : MonoBehaviour
         yield return new WaitForSeconds(3);
         StopMinigame(0);
         endUI.SetActive(true);
-
-        for(int i = 0;i < progressList.Count; i++)
+        FillInUI();
+        for (int i = 0;i < progressList.Count; i++)
         {
-            Vector3 pos = scrollTransform.position;
-            GameObject card = Instantiate(cardPrefab, new Vector3(pos.x,pos.y - (cardOffset * (i)), pos.z), scrollTransform.rotation, scrollTransform.parent);
+            GameObject card = Instantiate(cardPrefab, scrollTransform.parent);
             CardReferences refr = card.GetComponent<CardReferences>();
             refr.stats = progressList[i];
             refr.UpdateCard();
-            //yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(.3f);
         }
-        FillInUI();
+        
     }
 
     private void FillInUI()
