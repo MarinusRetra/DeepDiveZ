@@ -44,7 +44,7 @@ public class Grass : MonoBehaviour
     //Op collision wordt deze als eerst aangeroepen
     public static IEnumerator WaitThenDestory(GameObject _gameObjectIn)
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.5f);
         _gameObjectIn.SetActive(false);
     }
 }
