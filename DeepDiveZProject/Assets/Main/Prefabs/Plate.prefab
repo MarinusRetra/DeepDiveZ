@@ -54,7 +54,7 @@ MonoBehaviour:
   m_DecalLayerMask: 1
   m_ScaleMode: 0
   m_Offset: {x: 0, y: 0, z: 0.5}
-  m_Size: {x: 2, y: 2, z: 1}
+  m_Size: {x: 1, y: 1, z: 1}
   m_FadeFactor: 1
 --- !u!1 &2207766630817498569
 GameObject:
@@ -85,8 +85,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.64, y: 1.16, z: 2.75}
-  m_LocalScale: {x: 1, y: 1, z: 0.27843}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.16705802}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3161484254964630179}
   - {fileID: 2981537870889275913}
@@ -152,10 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 799f827ce5881294d9a5b558649df391, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectGrabbing: {fileID: 0}
   State: 0
-  Collider: {fileID: 7435876597295391118}
   Rigidbody: {fileID: 540583052014977002}
+  MayPickup: 0
 --- !u!1001 &3380573401273316834
 PrefabInstance:
   m_ObjectHideFlags: 0
