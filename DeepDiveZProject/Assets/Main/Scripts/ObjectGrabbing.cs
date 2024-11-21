@@ -37,6 +37,7 @@ public class ObjectGrabbing : MonoBehaviour
                 if (hit.transform.TryGetComponent(out Dish dish) && !dish.MayPickup) return;
                 else if (dish.State == Dish.DishState.BeingCleaned) dish.State = Dish.DishState.Done;
 
+                print("May pickup: " + dish.MayPickup);
                 print("Grab");
                 currentGrabbable = hit.transform.gameObject;
                 currentGrabbable.GetComponent<Rigidbody>().isKinematic = false;
