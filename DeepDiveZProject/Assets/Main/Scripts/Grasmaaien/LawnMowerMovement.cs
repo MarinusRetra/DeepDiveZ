@@ -11,13 +11,23 @@ public class LawnMowerMovement : MonoBehaviour
     private Rigidbody rb;
 
     bool Active = false;
+    Vector3 startPos;
+    Quaternion startRot;
 
-    private void Start()
+    private void OnEnable()
     {
         playerCollider = GetComponent<CapsuleCollider>();
         Cursor.lockState = CursorLockMode.Locked;
         rb = GetComponent<Rigidbody>();
         rb.maxLinearVelocity = maxMovementSpeed;
+        startPos = transform.position;
+        startRot = transform.rotation;
+    }
+
+    private void OnDisable()
+    {
+        transform.position = startPos;
+        transform.rotation = startRot;
     }
 
     private void Update()
