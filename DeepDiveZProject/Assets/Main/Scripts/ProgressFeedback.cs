@@ -101,6 +101,7 @@ public class ProgressFeedback : MonoBehaviour
         tracker.screenshot = currentMinigameImage;
         tracker.timeSpend = currentSeconds;
         tracker.minigame = currentMinigame;
+        tracker.progressOnTask = (int)_progress;
         currentSeconds = 0;
         currentMinigameImage = null;
         SortTrackerInList(tracker);
