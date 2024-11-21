@@ -59,7 +59,7 @@ public class ProgressFeedback : MonoBehaviour
                 break;
 
             case "GrasMaaien":
-                miniGame = Minigames.Grasmaaien; 
+                miniGame = Minigames.Grasmaaien;
                 break;
 
             default:

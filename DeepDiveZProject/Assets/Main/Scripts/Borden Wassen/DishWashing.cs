@@ -4,6 +4,7 @@ using UnityEngine.Rendering.Universal;
 
 public class DishWashing : MonoBehaviour
 {
+    [SerializeField] private DishSpawner DishSpawner;
     [SerializeField] private Camera taskCamera;
     [SerializeField] private LayerMask DishesLayer;
     [SerializeField] private PlayerInput PlayerInput;
@@ -50,6 +51,7 @@ public class DishWashing : MonoBehaviour
         {
             //print("Washing");
             dirtDecalProjector.fadeFactor -= dirtDecreaseValue;
+            DishSpawner.SetAmountDone(dirtDecalProjector.transform.parent.gameObject, dirtDecalProjector.fadeFactor);
         }
 
         lastMousePos = Mouse.current.position.value;
