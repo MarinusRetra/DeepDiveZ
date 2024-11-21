@@ -19,14 +19,9 @@ public class DishWashing : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerInput.actions["LMB"].performed += (InputAction.CallbackContext ctx) => MouseClicked();
+        PlayerInput.actions["LMB"].performed += (InputAction.CallbackContext ctx) => mouseClicking = true;
         PlayerInput.actions["LMB"].canceled += (InputAction.CallbackContext ctx) => mouseClicking = false;
         Cursor.lockState = CursorLockMode.Locked;
-    }
-
-    private void MouseClicked()
-    {
-        mouseClicking = true;
     }
 
     private void Update()
@@ -37,13 +32,13 @@ public class DishWashing : MonoBehaviour
 
         if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, DishesLayer))
         {
-            print("Hit ray");
+            //print("Hit ray");
             if (hitInfo.transform.TryGetComponent(out Dish dish))
             {
-                print("Found dish");
+                //print("Found dish");
                 if (dish.State == Dish.DishState.BeingCleaned)
                 {
-                    print("Dish is being cleaned");
+                    //print("Dish is being cleaned");
                     isClicking = true;
                     dirtDecalProjector = dish.GetComponentInChildren<DecalProjector>();
                 }
@@ -51,9 +46,9 @@ public class DishWashing : MonoBehaviour
         }
 
         //print("Mouse speed: " + Vector2.Distance(Mouse.current.position.value, lastMousePos) / Time.deltaTime);
-        if (isClicking && Vector2.Distance(Mouse.current.position.value, lastMousePos) / Time.deltaTime > minSpeed)
+        if (isClicking && mouseClicking && Vector2.Distance(Mouse.current.position.value, lastMousePos) / Time.deltaTime > minSpeed)
         {
-            print("Washing");
+            //print("Washing");
             dirtDecalProjector.fadeFactor -= dirtDecreaseValue;
         }
 

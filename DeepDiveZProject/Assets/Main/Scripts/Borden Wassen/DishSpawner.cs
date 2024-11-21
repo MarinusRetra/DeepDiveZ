@@ -22,10 +22,16 @@ public class DishSpawner : MonoBehaviour
 
     private void OnEnable()
     {
+        ResetMiniGame();
+    }
+
+    private void Setup()
+    {
         for (int i = 0; i < SpawnAmount; i++)
         {
             if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity))
             {
+                print(hit.transform.name);
                 Vector3 spawnPos = hit.point;
 
                 Dish dish = Instantiate(DishPrefab, spawnPos, Quaternion.identity).GetComponent<Dish>();
@@ -122,5 +128,18 @@ public class DishSpawner : MonoBehaviour
         percentage = (amountDone / (float)dishes.Count) * 100;
 
         return percentage;
+    }
+
+    public void ResetMiniGame()
+    {
+        for (int i = 0; i < dishes.Count; i++)
+        {
+            DestroyImmediate(dishes[i].GameObject);
+        }
+
+        dishes.Clear();
+        dishes = new();
+
+        Setup();
     }
 }
