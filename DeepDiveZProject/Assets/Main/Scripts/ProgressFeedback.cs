@@ -24,31 +24,38 @@ public class ProgressFeedback : MonoBehaviour
         {
             mainCam = Camera.main;
         }
-        StartCoroutine(startMinigame(Minigames.Grasmaaien));
+        StartCoroutine(StartMinigame(Minigames.Grasmaaien));
     }
 
     // Update is called once per frame
     void Update()
     {
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.L))
         {
-            stopMinigame();
+            StopMinigame(0);
         }
         if (Input.GetKeyDown(KeyCode.M))
         {
-            StartCoroutine(stopGame());
+            StartCoroutine(StopGame());
         }
         if (Input.GetKeyDown(KeyCode.N))
         {
-            StartCoroutine(startMinigame(Minigames.Grasmaaien));
+            StartCoroutine(StartMinigame(Minigames.Grasmaaien));
         }
         if (Input.GetKeyDown(KeyCode.B))
         {
-            StartCoroutine(startMinigame(Minigames.Afwassen));
+            StartCoroutine(StartMinigame(Minigames.Afwassen));
         }
+#endif
     }
 
-    IEnumerator startMinigame(Minigames currentMini)
+    public void StartMinigameFunction(Minigames game)
+    {
+        StartCoroutine(StartMinigame(game));
+    }
+
+    public IEnumerator StartMinigame(Minigames currentMini)
     {
         currentMinigame = currentMini;
         yield return new WaitForSeconds(1);
@@ -67,7 +74,7 @@ public class ProgressFeedback : MonoBehaviour
         }
     }
 
-    public void stopMinigame()
+    public void StopMinigame(float _progress)
     {
         inMinigame = false;
         MinigameProgress tracker = new MinigameProgress();
@@ -83,10 +90,15 @@ public class ProgressFeedback : MonoBehaviour
         SortTrackerInList(tracker);
     }
 
-    IEnumerator stopGame()
+    public void StopGameFunction()
+    {
+        StartCoroutine(StopGame());
+    }
+
+    public IEnumerator StopGame()
     {
         yield return new WaitForSeconds(3);
-        stopMinigame();
+        StopMinigame(0);
         endUI.SetActive(true);
 
         for(int i = 0;i < progressList.Count; i++)
