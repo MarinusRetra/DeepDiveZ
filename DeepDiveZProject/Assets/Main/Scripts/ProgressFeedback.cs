@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ProgressFeedback : MonoBehaviour
 {
@@ -50,9 +49,27 @@ public class ProgressFeedback : MonoBehaviour
 #endif
     }
 
-    public void StartMinigameFunction(Minigames game)
+    public void StartMinigameFunction(string game)
     {
-        StartCoroutine(StartMinigame(game));
+        Minigames miniGame;
+
+        switch (game)
+        {
+            case "AfWas":
+                miniGame = Minigames.Afwassen;
+                break;
+
+            case "GrasMaaien":
+                miniGame = Minigames.Grasmaaien; 
+                break;
+
+            default:
+                print("WARNING: Not correct string name, defaulting to grasmaaien");
+                miniGame = Minigames.Grasmaaien;
+                break;
+        }
+
+        StartCoroutine(StartMinigame(miniGame));
     }
 
     public IEnumerator StartMinigame(Minigames currentMini)
