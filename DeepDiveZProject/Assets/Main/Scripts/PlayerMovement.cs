@@ -62,6 +62,7 @@ public class PlayerMovement : MonoBehaviour
         //Gebruik ik voor gras displacement bij de gras shader -Marinus
         if (Active)
         {
+            Debug.Log(gameObject.name);
             Shader.SetGlobalVector("_Player", transform.position + Vector3.up * playerCollider.radius);
         }
 

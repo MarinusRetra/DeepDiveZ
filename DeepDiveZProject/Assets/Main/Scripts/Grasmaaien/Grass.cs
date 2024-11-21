@@ -9,6 +9,7 @@ public class Grass : MonoBehaviour
     private List<GameObject> GrassObjectsCurrentCount;
 
     [SerializeField] private TextMeshProUGUI grassPercentageText;
+    [SerializeField] private ProgressFeedback feedback;
 
     //Deze functie start de progress counter en reset het gras
     public void MinigameStart()
@@ -24,7 +25,12 @@ public class Grass : MonoBehaviour
 
     private void SetPercentage()
     {
-        grassPercentageText.text = $"{ Mathf.Round(Mathf.Abs(((float)GrassObjectsCurrentCount.Count / (float)GrassObjectsStartCount.Count * 100) - 100))}";
+        grassPercentageText.text = $"{ Mathf.Round(Mathf.Abs(((float)GrassObjectsCurrentCount.Count / (float)GrassObjectsStartCount.Count * 100) - 100))}%";
+    }
+
+    public void StopGrasmaaier()
+    {
+        feedback.StopMinigame(Mathf.Round(Mathf.Abs(((float)GrassObjectsCurrentCount.Count / (float)GrassObjectsStartCount.Count * 100) - 100)));
     }
 
     //Dit wordt aangeroepen als een gras stukje uitgezet wordt
