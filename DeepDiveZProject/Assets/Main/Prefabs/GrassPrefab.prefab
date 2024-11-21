@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 243604661074414503}
   - component: {fileID: 899037835220393891}
+  - component: {fileID: 4816799069804564929}
+  - component: {fileID: 24055857559309286}
   m_Layer: 0
   m_Name: GrassPrefab
   m_TagString: Untagged
@@ -52,6 +54,40 @@ LODGroup:
     renderers:
     - renderer: {fileID: 2519759119306972997}
   m_Enabled: 1
+--- !u!114 &4816799069804564929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256972184353360722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1cd78d2e736a974490a5dc5b96d5c3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GrassParent: {fileID: 0}
+--- !u!65 &24055857559309286
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256972184353360722}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.074196726, y: 0.049371988, z: 0.07551886}
+  m_Center: {x: -0.006722763, y: -0.028022632, z: 0.0006195605}
 --- !u!1 &6859554245178148108
 GameObject:
   m_ObjectHideFlags: 0
