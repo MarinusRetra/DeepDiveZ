@@ -13,24 +13,50 @@ public class ObjectGrabbing : MonoBehaviour
     private GameObject currentGrabbable;
     private Vector2 mousePos;
 
+    private float pickUpCooldown = 0.1f;
+    private float pickUpTimer;
+    private bool mouseClicked;
+
     private void OnEnable()
     {
-        PlayerInput.actions["LMB"].performed += (InputAction.CallbackContext ctx) => MouseClicked();
+        PlayerInput.actions["LMB"].started += (InputAction.CallbackContext ctx) => MouseClicked();
+        PlayerInput.actions["LMB"].canceled += (InputAction.CallbackContext ctx) => MouseUp();
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void MouseUp()
+    {
+        mouseClicked = false;
+
+        if (pickUpTimer <= pickUpCooldown)
+        {
+            Ray ray = TaskCamera.ScreenPointToRay(Mouse.current.position.value);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, GrabbableLayer))
+            {
+                if (hit.transform.TryGetComponent(out Dish dish) && !dish.MayPickup) return;
+                else if (dish.State == Dish.DishState.BeingCleaned) dish.State = Dish.DishState.Done;
+
+                print("Grab");
+                currentGrabbable = hit.transform.gameObject;
+                currentGrabbable.GetComponent<Rigidbody>().isKinematic = false;
+            }
+        }
     }
 
     private void MouseClicked()
     {
-        Ray ray = TaskCamera.ScreenPointToRay(Mouse.current.position.value);
-
-        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, GrabbableLayer))
-        {
-            currentGrabbable = hitInfo.transform.gameObject;
-        }
+        pickUpTimer = 0;
+        mouseClicked = true;
     }
 
     private void Update()
     {
+        if (mouseClicked)
+        {
+            pickUpTimer += Time.deltaTime;
+        }
+
         if (currentGrabbable)
         {
             Vector3 mousePos = new Vector3(Mouse.current.position.value.x, Mouse.current.position.value.y, DistanceToPlayer);
