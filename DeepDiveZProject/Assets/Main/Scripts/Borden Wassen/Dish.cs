@@ -2,31 +2,53 @@ using UnityEngine;
 
 public class Dish : MonoBehaviour
 {
-    [SerializeField] private ObjectGrabbing ObjectGrabbing;
-    [SerializeField] private DishState State;
-    [SerializeField] private Collider Collider;
+    public DishState State;
     [SerializeField] private Rigidbody Rigidbody;
 
-    private enum DishState
+    public bool MayPickup;
+
+    private ObjectGrabbing objectGrabbing;
+    private DishSpawner dishSpawner;
+
+    public enum DishState
     {
         Dirty,
         BeingCleaned,
-        Clean,
+        Done,
         Drying
+    }
+
+    private void Awake()
+    {
+        objectGrabbing = FindAnyObjectByType<ObjectGrabbing>();
+        dishSpawner = FindAnyObjectByType<DishSpawner>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        print("Colliding!");
         if (other.transform.TryGetComponent(out DishesPlaceSpot placeSpot))
         {
-            print("Found placespot");
-            ObjectGrabbing.StopGrabbing();
-            transform.position = placeSpot.GetPlaceSpot.position;
-            transform.rotation = placeSpot.GetPlaceSpot.rotation;
-            //Collider.enabled = false;
-            Rigidbody.isKinematic = true;
-            State = DishState.BeingCleaned;
+            if (placeSpot.GetPlaceSpotType == DishesPlaceSpot.PlaceSpotType.Sink && State == DishState.Dirty)
+            {
+                print("Sink go brr");
+                objectGrabbing.StopGrabbing();
+                transform.position = placeSpot.GetPlaceSpot.position;
+                transform.rotation = placeSpot.GetPlaceSpot.rotation;
+                Rigidbody.isKinematic = true;
+                State = DishState.BeingCleaned;
+            }
+            else if (placeSpot.GetPlaceSpotType == DishesPlaceSpot.PlaceSpotType.DryingRack && State == DishState.Done)
+            {
+                print("Drying rack");
+                objectGrabbing.StopGrabbing();
+                transform.position = placeSpot.GetPlaceSpot.position;
+                transform.rotation = placeSpot.GetPlaceSpot.rotation;
+                Rigidbody.isKinematic = true;
+                State = DishState.BeingCleaned;
+                MayPickup = false;
+                dishSpawner.Remove(Rigidbody);
+                dishSpawner.UnlockTop();
+            }
         }
     }
 }
