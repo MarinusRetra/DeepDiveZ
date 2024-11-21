@@ -16,6 +16,9 @@ public class ProgressFeedback : MonoBehaviour
     [SerializeField] private Transform scrollTransform;
     [SerializeField] private int cardOffset = 50;
     [SerializeField] private Minigames currentMinigame = Minigames.Grasmaaien;
+
+    [SerializeField] private GameObject blockageFence;
+    [SerializeField] private int amountOfGamesDoneUntilOpen;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -191,6 +194,10 @@ public class ProgressFeedback : MonoBehaviour
         if(progressList.Count == 0)
         {
             progressList.Add(_progress);
+            if (progressList.Count > amountOfGamesDoneUntilOpen)
+            {
+                blockageFence.SetActive(false);
+            }
             return;
         }
         for(int i = 0;i < progressList.Count;i++)
@@ -198,10 +205,18 @@ public class ProgressFeedback : MonoBehaviour
             if (!(progressList[i].timeSpend > _progress.timeSpend))
             {
                 progressList.Insert(i, _progress);
+                if (progressList.Count > amountOfGamesDoneUntilOpen)
+                {
+                    blockageFence.SetActive(false);
+                }
                 return;
             }
         }
         progressList.Add(_progress);
+        if (progressList.Count > amountOfGamesDoneUntilOpen)
+        {
+            blockageFence.SetActive(false);
+        }
     }
 
 }
