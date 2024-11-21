@@ -2,12 +2,23 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public struct DishData
+{
+    public float PercentDone;
+    public Dish Dish;
+    public Rigidbody Rb;
+    public GameObject GameObject;
+    public bool IsDone;
+}
+
 public class DishSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject DishPrefab;
     [SerializeField] private int SpawnAmount = 10;
-
-    private List<Rigidbody> dishes = new();
+    [SerializeField] private ProgressFeedback progressFeedback;
+    [SerializeField] private ExitButton exitButton;
+    
+    private List<DishData> dishes = new();
 
     private void OnEnable()
     {
@@ -17,10 +28,19 @@ public class DishSpawner : MonoBehaviour
             {
                 Vector3 spawnPos = hit.point;
 
-                Rigidbody dish = Instantiate(DishPrefab, spawnPos, Quaternion.identity).GetComponent<Rigidbody>();
-                dishes.Add(dish);
-                dish.isKinematic = true;
-                dish.GetComponent<Dish>().MayPickup = false;
+                Dish dish = Instantiate(DishPrefab, spawnPos, Quaternion.identity).GetComponent<Dish>();
+                dish.name = "Plate: " + i;
+                DishData dishData = new()
+                {
+                    Dish = dish,
+                    Rb = dish.GetComponent<Rigidbody>(),
+                    GameObject = dish.gameObject,
+                };
+
+                dishData.Rb.isKinematic = true;
+                dishData.Dish.MayPickup = false;
+
+                dishes.Add(dishData);
             }
         }
 
@@ -29,12 +49,78 @@ public class DishSpawner : MonoBehaviour
 
     public void UnlockTop()
     {
-        dishes[dishes.Count - 1].isKinematic = false;
-        dishes[dishes.Count - 1].GetComponent<Dish>().MayPickup = true;
+        DishData validDishData = new();
+
+        for (int i = 0; i < dishes.Count; i++)
+        {
+            if (!dishes[i].IsDone) validDishData = dishes[i];
+        }
+
+        if (validDishData.GameObject != null)
+        {
+            validDishData.Rb.isKinematic = false;
+            validDishData.Dish.MayPickup = true;
+        }
+        else
+        {
+            print("Unlock to didn't work, minigame done?");
+        }
     }
 
-    public void Remove(Rigidbody dish)
+    public DishData GetDishData(GameObject dish)
     {
-        dishes.Remove(dish);
+        for (int i = 0; i < dishes.Count; i++)
+        {
+            if (dishes[i].GameObject == dish)
+            {
+                return dishes[i];
+            }
+        }
+
+        print("NOT WORKING11");
+
+        return new DishData();
+    }
+
+    public void SetIsDone(GameObject dish, bool value)
+    {
+        for (int i = 0; i < dishes.Count; i++)
+        {
+            if (dishes[i].GameObject == dish)
+            {
+                DishData dishData = dishes[i];
+                dishData.IsDone = value;
+                dishes[i] = dishData;
+            }
+        }
+    }
+
+    public void CheckDone()
+    {
+        bool done = false;
+
+        for (int i = 0; i < dishes.Count; i++)
+        {
+            if (dishes[i].IsDone) return;
+        }
+
+        progressFeedback.StopMinigame(100);
+        exitButton.OnExit.Invoke();
+    }
+
+    public float GetPercentageDone()
+    {
+        float percentage = 0;
+
+        float amountDone = 0;
+
+        for (int i = 0; i < dishes.Count; i++)
+        {
+            if (dishes[i].IsDone) amountDone++;
+        }
+
+        percentage = (amountDone / (float)dishes.Count) * 100;
+
+        return percentage;
     }
 }
