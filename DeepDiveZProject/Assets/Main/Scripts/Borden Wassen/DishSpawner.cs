@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
 
 public struct DishData
@@ -9,6 +9,7 @@ public struct DishData
     public Rigidbody Rb;
     public GameObject GameObject;
     public bool IsDone;
+    public float AmountDone;
 }
 
 public class DishSpawner : MonoBehaviour
@@ -17,6 +18,7 @@ public class DishSpawner : MonoBehaviour
     [SerializeField] private int SpawnAmount = 10;
     [SerializeField] private ProgressFeedback progressFeedback;
     [SerializeField] private ExitButton exitButton;
+    [SerializeField] private TMP_Text ProgressText;
     
     private List<DishData> dishes = new();
 
@@ -31,7 +33,6 @@ public class DishSpawner : MonoBehaviour
         {
             if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity))
             {
-                print(hit.transform.name);
                 Vector3 spawnPos = hit.point;
 
                 Dish dish = Instantiate(DishPrefab, spawnPos, Quaternion.identity).GetComponent<Dish>();
@@ -101,9 +102,24 @@ public class DishSpawner : MonoBehaviour
         }
     }
 
+    public void SetAmountDone(GameObject dish, float value)
+    {
+        for (int i = 0; i < dishes.Count; i++)
+        {
+            if (dishes[i].GameObject == dish)
+            {
+                DishData dishData = dishes[i];
+                dishData.AmountDone = value;
+                dishes[i] = dishData;
+            }
+        }
+    }
+
     public void CheckDone()
     {
         bool done = false;
+
+        GetPercentageDone();
 
         for (int i = 0; i < dishes.Count; i++)
         {
@@ -126,6 +142,8 @@ public class DishSpawner : MonoBehaviour
         }
 
         percentage = (amountDone / (float)dishes.Count) * 100;
+
+        ProgressText.SetText(percentage + "%");
 
         return percentage;
     }
