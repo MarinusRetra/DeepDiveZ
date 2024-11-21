@@ -63,6 +63,7 @@ public class ObjectGrabbing : MonoBehaviour
             Vector3 worldMousePos = TaskCamera.ScreenToWorldPoint(mousePos);
 
             currentGrabbable.GetComponent<Rigidbody>().linearVelocity = (worldMousePos - currentGrabbable.transform.position) * MovementSpeed;
+            currentGrabbable.transform.rotation = Quaternion.identity;
         }
     }
 

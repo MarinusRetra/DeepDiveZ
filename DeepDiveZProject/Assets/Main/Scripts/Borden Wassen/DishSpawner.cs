@@ -147,10 +147,12 @@ public class DishSpawner : MonoBehaviour
             }
         }
 
-        //Times 2 because the decal projector can only become 1 at max
-        percentage = ((amountDone + percentageDone) / ((float)dishes.Count * 2)) * 100;
+        print(percentageDone);
 
-        ProgressText.SetText(percentage + "%");
+        //Times 2 because the decal projector can only become 1 at max
+        percentage = ((percentageDone) / ((float)dishes.Count)) * 100;
+
+        ProgressText.SetText(Mathf.Round(percentage * 10) / 10 + "%");
 
         return percentage;
     }

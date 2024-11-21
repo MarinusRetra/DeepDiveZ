@@ -51,7 +51,7 @@ public class DishWashing : MonoBehaviour
         {
             //print("Washing");
             dirtDecalProjector.fadeFactor -= dirtDecreaseValue;
-            DishSpawner.SetAmountDone(dirtDecalProjector.transform.parent.gameObject, dirtDecalProjector.fadeFactor);
+            DishSpawner.SetAmountDone(dirtDecalProjector.transform.parent.gameObject, Mathf.Abs(dirtDecalProjector.fadeFactor - 1));
         }
 
         lastMousePos = Mouse.current.position.value;
