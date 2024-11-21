@@ -101,6 +101,7 @@ public class ProgressFeedback : MonoBehaviour
         tracker.screenshot = currentMinigameImage;
         tracker.timeSpend = currentSeconds;
         tracker.minigame = currentMinigame;
+        tracker.progressOnTask = (int)_progress;
         currentSeconds = 0;
         currentMinigameImage = null;
         SortTrackerInList(tracker);
@@ -113,8 +114,7 @@ public class ProgressFeedback : MonoBehaviour
 
     public IEnumerator StopGame()
     {
-        yield return new WaitForSeconds(3);
-        StopMinigame(0);
+        //StopMinigame(0);
         endUI.SetActive(true);
         FillInUI();
         for (int i = 0;i < progressList.Count; i++)
