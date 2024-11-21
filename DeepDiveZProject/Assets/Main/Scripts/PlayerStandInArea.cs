@@ -146,7 +146,6 @@ public class PlayerStandInArea : MonoBehaviour
         //Layer 12 is the body layer, So it checks for the player
         if (other.gameObject.CompareTag("Player"))
         {
-            print("THE PLAYER HATES MEN");
             OnPlayerEnter();
         }
     }
@@ -156,7 +155,6 @@ public class PlayerStandInArea : MonoBehaviour
         //Layer 12 is the body layer, So it checks for the player
         if (other.gameObject.CompareTag("Player"))
         {
-            print("THE PLAYER LIKES MEN");
             OnPlayerExit();
         }
     }
