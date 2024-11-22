@@ -25,8 +25,8 @@ public class ExitButton : MonoBehaviour
         {
             if (hit.transform.gameObject == gameObject)
             {
-                OnExit.Invoke();
                 progressFeedback.StopMinigame(dishSpawner.GetPercentageDone());
+                OnExit.Invoke();
             }
         }
     }

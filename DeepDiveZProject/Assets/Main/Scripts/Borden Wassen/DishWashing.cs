@@ -47,7 +47,7 @@ public class DishWashing : MonoBehaviour
         }
 
         //print("Mouse speed: " + Vector2.Distance(Mouse.current.position.value, lastMousePos) / Time.deltaTime);
-        if (isClicking && mouseClicking && Vector2.Distance(Mouse.current.position.value, lastMousePos) / Time.deltaTime > minSpeed)
+        if (isClicking && mouseClicking && Mouse.current.delta.magnitude > minSpeed)
         {
             //print("Washing");
             dirtDecalProjector.fadeFactor -= dirtDecreaseValue;

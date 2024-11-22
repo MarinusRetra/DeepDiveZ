@@ -12,7 +12,7 @@ public class ObjectGrabbing : MonoBehaviour
     private GameObject currentGrabbable;
     private Vector2 mousePos;
 
-    private float pickUpCooldown = 0.1f;
+    private float pickUpCooldown = 0.5f;
     private float pickUpTimer;
     private bool mouseClicked;
 

@@ -154,7 +154,7 @@ public class DishSpawner : MonoBehaviour
 
         ProgressText.SetText(Mathf.Round(percentage * 10) / 10 + "%");
 
-        return percentage;
+        return Mathf.Round(percentage * 10) / 10;
     }
 
     public void ResetMiniGame()
