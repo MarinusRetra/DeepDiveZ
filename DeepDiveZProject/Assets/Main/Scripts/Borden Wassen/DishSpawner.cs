@@ -182,7 +182,7 @@ public class DishSpawner : MonoBehaviour
         //Destroy all the plates.
         for (int i = 0; i < dishes.Count; i++)
         {
-            DestroyImmediate(dishes[i].GameObject);
+            Destroy(dishes[i].GameObject);
         }
 
         //Clear the dishes list.

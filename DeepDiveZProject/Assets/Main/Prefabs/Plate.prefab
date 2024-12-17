@@ -153,8 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   State: 0
-  Rigidbody: {fileID: 540583052014977002}
   MayPickup: 0
+  rb: {fileID: 540583052014977002}
 --- !u!1001 &3380573401273316834
 PrefabInstance:
   m_ObjectHideFlags: 0
