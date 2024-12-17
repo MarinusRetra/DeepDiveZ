@@ -111,9 +111,15 @@ public class DishSpawner : MonoBehaviour
     /// <param name="value">The value the found DishDate's IsDone is set to.</param>
     public void SetIsDone(GameObject dish, bool value)
     {
-        DishData dishData = GetDishData(dish);
-
-        dishData.IsDone = value;
+        for (int i = 0; i < dishes.Count; i++)
+        {
+            if (dishes[i].GameObject == dish)
+            {
+                DishData dishData = dishes[i];
+                dishData.IsDone = value;
+                dishes[i] = dishData;
+            }
+        }
     }
 
     /// <summary>
@@ -123,9 +129,15 @@ public class DishSpawner : MonoBehaviour
     /// <param name="value">The value the found DishDate's AmountDone is set to.</param>
     public void SetAmountDone(GameObject dish, float value)
     {
-        DishData dishData = GetDishData(dish);
-
-        dishData.AmountDone = value;
+        for (int i = 0; i < dishes.Count; i++)
+        {
+            if (dishes[i].GameObject == dish)
+            {
+                DishData dishData = dishes[i];
+                dishData.AmountDone = value;
+                dishes[i] = dishData;
+            }
+        }
     }
 
     /// <summary>
