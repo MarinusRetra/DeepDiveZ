@@ -3,14 +3,13 @@ using UnityEngine.InputSystem;
 
 public class ObjectGrabbing : MonoBehaviour
 {
-    [SerializeField] private Camera TaskCamera;
-    [SerializeField] private float DistanceToPlayer;
-    [SerializeField] private LayerMask GrabbableLayer;
-    [SerializeField] private float MovementSpeed;
-    [SerializeField] private PlayerInput PlayerInput;
+    [SerializeField] private Camera taskCamera;
+    [SerializeField] private float distanceToPlayer;
+    [SerializeField] private LayerMask grabbableLayer;
+    [SerializeField] private float movementSpeed;
+    [SerializeField] private PlayerInput playerInput;
 
     private GameObject currentGrabbable;
-    private Vector2 mousePos;
 
     private float pickUpCooldown = 0.5f;
     private float pickUpTimer;
@@ -18,26 +17,26 @@ public class ObjectGrabbing : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerInput.actions["LMB"].started += (InputAction.CallbackContext ctx) => MouseClicked();
-        PlayerInput.actions["LMB"].canceled += (InputAction.CallbackContext ctx) => MouseUp();
-        Cursor.lockState = CursorLockMode.Locked;
+        //Call MouseClicked and MouseUp based on if the left mouse button is pressed or not.
+        playerInput.actions["LMB"].started += (InputAction.CallbackContext ctx) => MouseClicked();
+        playerInput.actions["LMB"].canceled += (InputAction.CallbackContext ctx) => MouseUp();
     }
 
     private void MouseUp()
     {
         mouseClicked = false;
 
+        //Only pickup the object when the player holds the left mouse button for a short time, otherwise allow for manipulating the object, like washing the dishes.
         if (pickUpTimer <= pickUpCooldown)
         {
-            Ray ray = TaskCamera.ScreenPointToRay(Mouse.current.position.value);
+            Ray ray = taskCamera.ScreenPointToRay(Mouse.current.position.value);
 
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, GrabbableLayer))
+            //Shoot ray from the middle of the camera to check if the ray hits a dish.
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, grabbableLayer))
             {
                 if (hit.transform.TryGetComponent(out Dish dish) && !dish.MayPickup) return;
                 else if (dish.State == Dish.DishState.BeingCleaned) dish.State = Dish.DishState.Done;
 
-                print("May pickup: " + dish.MayPickup);
-                print("Grab");
                 currentGrabbable = hit.transform.gameObject;
                 currentGrabbable.GetComponent<Rigidbody>().isKinematic = false;
             }
@@ -52,21 +51,26 @@ public class ObjectGrabbing : MonoBehaviour
 
     private void Update()
     {
+        //Keep track of how long the mouse is pressed.
         if (mouseClicked)
         {
             pickUpTimer += Time.deltaTime;
         }
 
+        //Move the grabbale towards the mouse position with a preset z distance.
         if (currentGrabbable)
         {
-            Vector3 mousePos = new Vector3(Mouse.current.position.value.x, Mouse.current.position.value.y, DistanceToPlayer);
-            Vector3 worldMousePos = TaskCamera.ScreenToWorldPoint(mousePos);
+            Vector3 mousePos = new Vector3(Mouse.current.position.value.x, Mouse.current.position.value.y, distanceToPlayer);
+            Vector3 worldMousePos = taskCamera.ScreenToWorldPoint(mousePos);
 
-            currentGrabbable.GetComponent<Rigidbody>().linearVelocity = (worldMousePos - currentGrabbable.transform.position) * MovementSpeed;
+            currentGrabbable.GetComponent<Rigidbody>().linearVelocity = (worldMousePos - currentGrabbable.transform.position) * movementSpeed;
             currentGrabbable.transform.rotation = Quaternion.identity;
         }
     }
 
+    /// <summary>
+    /// Stop grabbing the currentGrabbable.
+    /// </summary>
     public void StopGrabbing()
     {
         currentGrabbable = null;

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+//This struct contains data for a dish. This setup for all dishes.
 public struct DishData
 {
     public float PercentDone;
@@ -14,11 +15,11 @@ public struct DishData
 
 public class DishSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject DishPrefab;
-    [SerializeField] private int SpawnAmount = 10;
+    [SerializeField] private GameObject dishPrefab;
+    [SerializeField] private int spawnAmount = 10;
     [SerializeField] private ProgressFeedback progressFeedback;
     [SerializeField] private ExitButton exitButton;
-    [SerializeField] private TMP_Text ProgressText;
+    [SerializeField] private TMP_Text progressText;
     
     private List<DishData> dishes = new();
 
@@ -29,13 +30,18 @@ public class DishSpawner : MonoBehaviour
 
     private void Setup()
     {
-        for (int i = 0; i < SpawnAmount; i++)
+        //Spawn the plates
+        for (int i = 0; i < spawnAmount; i++)
         {
+            //Shoots a ray downwards until it hits something, either a plate or the counter top.
+            //At that position it spawns the plate to make sure they are all stacked on top of each other.
             if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity))
             {
                 Vector3 spawnPos = hit.point;
 
-                Dish dish = Instantiate(DishPrefab, spawnPos, Quaternion.identity).GetComponent<Dish>();
+                Dish dish = Instantiate(dishPrefab, spawnPos, Quaternion.identity).GetComponent<Dish>();
+
+                //Name the plate for debugging
                 dish.name = "Plate: " + i;
                 DishData dishData = new()
                 {
@@ -44,6 +50,7 @@ public class DishSpawner : MonoBehaviour
                     GameObject = dish.gameObject,
                 };
 
+                //Make it kinematic so that the pile doesn't fall over.
                 dishData.Rb.isKinematic = true;
                 dishData.Dish.MayPickup = false;
 
@@ -54,15 +61,20 @@ public class DishSpawner : MonoBehaviour
         UnlockTop();
     }
 
+    /// <summary>
+    /// Allow the top dish to be pickup.
+    /// </summary>
     public void UnlockTop()
     {
         DishData validDishData = new();
 
+        //Set validDishDate to the data from the first dish that is not done, so the top dish.
         for (int i = 0; i < dishes.Count; i++)
         {
             if (!dishes[i].IsDone) validDishData = dishes[i];
         }
 
+        //Check if the dish actually exists, if it doens't there probably isn't another dish, so the minigame is probably done.
         if (validDishData.GameObject != null)
         {
             validDishData.Rb.isKinematic = false;
@@ -70,10 +82,15 @@ public class DishSpawner : MonoBehaviour
         }
         else
         {
-            print("Unlock to didn't work, minigame done?");
+            print("UnlockTop didn't work, minigame done?");
         }
     }
 
+    /// <summary>
+    /// Returns the DishData based on a GameObject.
+    /// </summary>
+    /// <param name="dish">The GameObject the search is based on.</param>
+    /// <returns>If found the correct DishData, otherwise an empty DishData object.</returns>
     public DishData GetDishData(GameObject dish)
     {
         for (int i = 0; i < dishes.Count; i++)
@@ -84,60 +101,62 @@ public class DishSpawner : MonoBehaviour
             }
         }
 
-        print("NOT WORKING11");
-
         return new DishData();
     }
 
+    /// <summary>
+    /// Search for the correct dish using a GameObject and then set IsDone of the found DishData to the "value".
+    /// </summary>
+    /// <param name="dish">The GameObject used in the search.</param>
+    /// <param name="value">The value the found DishDate's IsDone is set to.</param>
     public void SetIsDone(GameObject dish, bool value)
     {
-        for (int i = 0; i < dishes.Count; i++)
-        {
-            if (dishes[i].GameObject == dish)
-            {
-                DishData dishData = dishes[i];
-                dishData.IsDone = value;
-                dishes[i] = dishData;
-            }
-        }
+        DishData dishData = GetDishData(dish);
+
+        dishData.IsDone = value;
     }
 
+    /// <summary>
+    /// Search for the correct dish using a GameObject and then set AmountDone of the found DishData to the "value".
+    /// </summary>
+    /// <param name="dish">The GameObject used in the search.</param>
+    /// <param name="value">The value the found DishDate's AmountDone is set to.</param>
     public void SetAmountDone(GameObject dish, float value)
     {
-        for (int i = 0; i < dishes.Count; i++)
-        {
-            if (dishes[i].GameObject == dish)
-            {
-                DishData dishData = dishes[i];
-                dishData.AmountDone = value;
-                dishes[i] = dishData;
-            }
-        }
+        DishData dishData = GetDishData(dish);
+
+        dishData.AmountDone = value;
     }
 
+    /// <summary>
+    /// Check if the minigame is done.
+    /// </summary>
     public void CheckDone()
     {
-        bool done = false;
+        float percentageDone = GetPercentageDone();
 
-        GetPercentageDone();
-
+        //Check if the minigame is done by checking if all the dishes are done.
         for (int i = 0; i < dishes.Count; i++)
         {
             if (dishes[i].IsDone) return;
         }
 
-        progressFeedback.StopMinigame(100);
+        progressFeedback.StopMinigame(percentageDone);
         exitButton.OnExit.Invoke();
     }
 
+    /// <summary>
+    /// Get the total percentage done of all dishes
+    /// </summary>
+    /// <returns>A number that is the total percentage of all dishes AmountDone from 0 to 100.</returns>
     public float GetPercentageDone()
     {
-        float percentage = 0;
-
         float amountDone = 0;
 
         float percentageDone = 0;
 
+        //Check for all dishes if their done and keep count with amountDone.
+        //Also calculate total percentageDone.
         for (int i = 0; i < dishes.Count; i++)
         {
             if (dishes[i].IsDone)
@@ -147,26 +166,30 @@ public class DishSpawner : MonoBehaviour
             }
         }
 
-        print(percentageDone);
+        //Calculate percentage.
+        float percentage = (percentageDone) / ((float)dishes.Count) * 100;
 
-        //Times 2 because the decal projector can only become 1 at max
-        percentage = ((percentageDone) / ((float)dishes.Count)) * 100;
-
-        ProgressText.SetText(Mathf.Round(percentage * 10) / 10 + "%");
+        progressText.SetText(Mathf.Round(percentage * 10) / 10 + "%");
 
         return Mathf.Round(percentage * 10) / 10;
     }
 
+    /// <summary>
+    /// Reset the minigame to make sure it's replayable.
+    /// </summary>
     public void ResetMiniGame()
     {
+        //Destroy all the plates.
         for (int i = 0; i < dishes.Count; i++)
         {
             DestroyImmediate(dishes[i].GameObject);
         }
 
+        //Clear the dishes list.
         dishes.Clear();
         dishes = new();
 
+        //Sets up the next dish minigame, like spawning dishes.
         Setup();
     }
 }

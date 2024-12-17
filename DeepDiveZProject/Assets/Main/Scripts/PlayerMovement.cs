@@ -5,20 +5,19 @@ using UnityEngine.Events;
 [RequireComponent(typeof(NavMeshAgent))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float acceptDistance;
-
     public UnityEvent OnPlayerStandsStill;
 
-    private NavMeshAgent agent;
+    [SerializeField, Tooltip("The distance that the player has to be from it's destination before it counts as stopped.")]
+    private float acceptDistance;
 
+    private NavMeshAgent agent;
     private bool isMoving;
 
     private InteractableObject interactable;
 
-    private bool Active = true;
-
     //playerCollider is nodig om de radius te pakken voor de grass shader
     private CapsuleCollider playerCollider;
+    private bool Active = true;
 
     private void Awake()
     {
@@ -26,6 +25,10 @@ public class PlayerMovement : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
+    /// <summary>
+    /// Set the destination of the player to the "position" paramater.
+    /// </summary>
+    /// <param name="position">The position the destination is set to.</param>
     public void Move(Vector3 position)
     {
         interactable = null;
@@ -62,7 +65,6 @@ public class PlayerMovement : MonoBehaviour
         //Gebruik ik voor gras displacement bij de gras shader -Marinus
         if (Active)
         {
-            Debug.Log(gameObject.name);
             Shader.SetGlobalVector("_Player", transform.position + Vector3.up * playerCollider.radius);
         }
 
@@ -77,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
             if (interactable) interactable.Interact();
         }
 
+        //Stop the player when it's within acceptDistance of the destination.
         if (agent.remainingDistance <= acceptDistance)
         {
             agent.SetDestination(transform.position);

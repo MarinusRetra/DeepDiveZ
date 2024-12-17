@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class DishesPlaceSpot : MonoBehaviour
 {
-    [SerializeField] private PlaceSpotType SpotType;
-    [SerializeField] private Transform PlaceSpot;
+    [SerializeField] private PlaceSpotType spotType;
+    [SerializeField] private Transform placeSpot;
 
-    public PlaceSpotType GetPlaceSpotType => SpotType;
+    public PlaceSpotType GetPlaceSpotType => spotType;
 
-    public Transform GetPlaceSpot => PlaceSpot;
+    public Transform GetPlaceSpot => placeSpot;
 
     public enum PlaceSpotType
     {

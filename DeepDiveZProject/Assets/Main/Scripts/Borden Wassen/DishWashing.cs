@@ -4,56 +4,51 @@ using UnityEngine.Rendering.Universal;
 
 public class DishWashing : MonoBehaviour
 {
-    [SerializeField] private DishSpawner DishSpawner;
+    [SerializeField] private DishSpawner dishSpawner;
     [SerializeField] private Camera taskCamera;
-    [SerializeField] private LayerMask DishesLayer;
-    [SerializeField] private PlayerInput PlayerInput;
+    [SerializeField] private LayerMask dishesLayer;
+    [SerializeField] private PlayerInput playerInput;
     [SerializeField] private float minSpeed;
     [SerializeField] private float dirtDecreaseValue = 0.01f;
 
-    private bool isClicking;
+    private bool cursorHitDishes;
     private bool mouseClicking;
-
-    private Vector2 lastMousePos;
 
     private DecalProjector dirtDecalProjector;
 
     private void OnEnable()
     {
-        PlayerInput.actions["LMB"].performed += (InputAction.CallbackContext ctx) => mouseClicking = true;
-        PlayerInput.actions["LMB"].canceled += (InputAction.CallbackContext ctx) => mouseClicking = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Set mouseClicking based on if the left mouse button is pressed or not.
+        playerInput.actions["LMB"].performed += (InputAction.CallbackContext ctx) => mouseClicking = true;
+        playerInput.actions["LMB"].canceled += (InputAction.CallbackContext ctx) => mouseClicking = false;
     }
 
     private void Update()
     {
-        isClicking = false;
+        cursorHitDishes = false;
 
+        //Shoot ray from the middle of the screen.
         Ray ray = taskCamera.ScreenPointToRay(Mouse.current.position.value);
 
-        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, DishesLayer))
+        //If the ray hits a dish that is beingcleaned, allow it to be cleaned
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, dishesLayer))
         {
-            //print("Hit ray");
-            if (hitInfo.transform.TryGetComponent(out Dish dish))
+            if (hit.transform.TryGetComponent(out Dish dish))
             {
-                //print("Found dish");
                 if (dish.State == Dish.DishState.BeingCleaned)
                 {
-                    //print("Dish is being cleaned");
-                    isClicking = true;
+                    cursorHitDishes = true;
                     dirtDecalProjector = dish.GetComponentInChildren<DecalProjector>();
                 }
             }
         }
 
-        //print("Mouse speed: " + Vector2.Distance(Mouse.current.position.value, lastMousePos) / Time.deltaTime);
-        if (isClicking && mouseClicking && Mouse.current.delta.magnitude > minSpeed)
+        //When allowed and the mouse is moving fast enough, clean the detected dish.
+        if (cursorHitDishes && mouseClicking && Mouse.current.delta.magnitude > minSpeed)
         {
-            //print("Washing");
+            //Lower the opactity of the decal projector from the dish.
             dirtDecalProjector.fadeFactor -= dirtDecreaseValue;
-            DishSpawner.SetAmountDone(dirtDecalProjector.transform.parent.gameObject, Mathf.Abs(dirtDecalProjector.fadeFactor - 1));
+            dishSpawner.SetAmountDone(dirtDecalProjector.transform.parent.gameObject, Mathf.Abs(dirtDecalProjector.fadeFactor - 1));
         }
-
-        lastMousePos = Mouse.current.position.value;
     }
 }
