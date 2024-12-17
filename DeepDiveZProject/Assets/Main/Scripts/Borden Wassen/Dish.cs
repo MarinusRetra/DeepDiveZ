@@ -3,9 +3,9 @@ using UnityEngine;
 public class Dish : MonoBehaviour
 {
     public DishState State;
-    [SerializeField] private Rigidbody Rigidbody;
-
     public bool MayPickup;
+
+    [SerializeField] private Rigidbody rb;
 
     private ObjectGrabbing objectGrabbing;
     private DishSpawner dishSpawner;
@@ -20,36 +20,38 @@ public class Dish : MonoBehaviour
 
     private void Awake()
     {
+        //Find scripts and assign. There can only ever be 1 of either of these scripts.
         objectGrabbing = FindAnyObjectByType<ObjectGrabbing>();
         dishSpawner = FindAnyObjectByType<DishSpawner>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        //Check if whatever this collides with has a DishesPlaceSpot script.
         if (other.transform.TryGetComponent(out DishesPlaceSpot placeSpot))
         {
+            //Check if the dish is dirty and it collides with the sink, then place it in the sink.
             if (placeSpot.GetPlaceSpotType == DishesPlaceSpot.PlaceSpotType.Sink && State == DishState.Dirty)
             {
-                print("Sink go brr");
                 objectGrabbing.StopGrabbing();
                 transform.SetPositionAndRotation(placeSpot.GetPlaceSpot.position, placeSpot.GetPlaceSpot.rotation);
-                Rigidbody.isKinematic = true;
+                rb.isKinematic = true;
                 State = DishState.BeingCleaned;
             }
+            //Check if the dish is cleaned and it collides with the drying rack, then place it in the dryingrack.
             else if (placeSpot.GetPlaceSpotType == DishesPlaceSpot.PlaceSpotType.DryingRack && State == DishState.Done)
             {
-                print("Drying rack");
                 objectGrabbing.StopGrabbing();
                 transform.SetPositionAndRotation(placeSpot.GetPlaceSpot.position, placeSpot.GetPlaceSpot.rotation);
-                Rigidbody.isKinematic = true;
+                rb.isKinematic = true;
                 State = DishState.Drying;
-                //DishData dishData = dishSpawner.GetDishData(gameObject);
-                //dishData.IsDone = true;
                 dishSpawner.SetIsDone(gameObject, true);
-                //DishData test = dishSpawner.GetDishData(gameObject);
-                //print("IsDone : " + test.IsDone);
                 MayPickup = false;
+
+                //Allow the top dish from the dishes pile to be grabbed.
                 dishSpawner.UnlockTop();
+
+                //Check if the minigame is done.
                 dishSpawner.CheckDone();
             }
         }
