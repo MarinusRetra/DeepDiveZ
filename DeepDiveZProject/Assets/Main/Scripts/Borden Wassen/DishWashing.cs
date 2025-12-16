@@ -33,6 +33,7 @@ public class DishWashing : MonoBehaviour
         //If the ray hits a dish that is beingcleaned, allow it to be cleaned
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, dishesLayer))
         {
+            print(hit.transform.gameObject.name + "washed up");
             if (hit.transform.TryGetComponent(out Dish dish))
             {
                 if (dish.State == Dish.DishState.BeingCleaned)

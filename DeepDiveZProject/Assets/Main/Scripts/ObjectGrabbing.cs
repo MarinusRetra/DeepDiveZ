@@ -29,11 +29,13 @@ public class ObjectGrabbing : MonoBehaviour
         //Only pickup the object when the player holds the left mouse button for a short time, otherwise allow for manipulating the object, like washing the dishes.
         if (pickUpTimer <= pickUpCooldown)
         {
+            print("went go");
             Ray ray = taskCamera.ScreenPointToRay(Mouse.current.position.value);
 
             //Shoot ray from the middle of the camera to check if the ray hits a dish.
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, grabbableLayer))
             {
+                print(hit.transform.gameObject.name);
                 if (hit.transform.TryGetComponent(out Dish dish) && !dish.MayPickup) return;
                 else if (dish.State == Dish.DishState.BeingCleaned) dish.State = Dish.DishState.Done;
 

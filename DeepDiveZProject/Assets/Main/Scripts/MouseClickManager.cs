@@ -18,19 +18,23 @@ public class MouseClickManager : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+        
         //Shoot ray from camera to check what is hit.
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, interactionLayer))
         {
             int objectLayerMask = (1 << hit.transform.gameObject.layer);
+            print("You" + floorLayer.value + "      " + objectLayerMask);
 
             //If the floor is hit, move the player to that location.
             if ((floorLayer.value & objectLayerMask) > 0)
             {
+                print("go");
                 playerMovement.Move(hit.point);
             }
             //If an interactable object is hit, interact with that object.
             else if ((interactabeLayer.value & objectLayerMask) > 0)
             {
+                print("interac");
                 playerMovement.MoveToInteractable(hit.transform.gameObject);
             }
         }
